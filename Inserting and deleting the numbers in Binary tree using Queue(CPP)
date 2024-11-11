@@ -1,0 +1,175 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node{
+    public:
+    Node* left;
+    int key;
+    Node* right;
+};
+Node* newNode(int data){
+    Node* n=new Node();
+    n->key=data;
+    n->left=NULL;
+    n->right=NULL;
+    return n;
+}
+Node* insert(Node*root,int data){
+    Node* nn=newNode(data);
+    if(root==NULL){
+        root=nn;
+        return root;
+    }
+    else{
+        queue<Node*>q;
+        q.push(root);
+        while(!q.empty()){
+            Node* present=q.front();
+            q.pop();
+            if(present->left==NULL){
+                present->left=nn;
+                break;
+            }
+            else{
+                q.push(present->left);
+            }
+            if(present->right==NULL){
+                present->right=nn;
+                break;
+            }
+            else{
+                q.push(present->right);
+            }
+        }
+    }
+    return root;
+}
+//display function or level order
+Node* display(Node* root){
+    if(root==NULL){
+        cout<<"Tree Empty";
+    }
+    queue<Node*>queue;
+    queue.push(root);
+    while(!queue.empty()){
+        Node*front=queue.front();
+        queue.pop();
+        cout<<front->key<<"->";
+        if(front->left!=NULL){
+            queue.push(front->left);
+        }
+        if(front->right!=NULL){
+            queue.push(front->right);
+        }
+    }
+    cout<<"NULL";
+    return root;
+}
+int find_lastelement(Node* root)
+{
+    Node* temp = NULL;
+    if(root == NULL)
+    {
+        cout << "No element" << " ";
+    }
+    else
+    {
+        queue<Node*> q;
+        q.push(root);
+        while(!q.empty())
+        {
+            temp = q.front();
+            q.pop();
+            if(temp->left != NULL)
+            {
+                q.push(temp->left);
+            }
+            if(temp->right != NULL)
+            {
+                q.push(temp->right);
+            }
+        }
+    }
+    return temp->key;
+}
+
+Node* delete_last(Node* root)
+{
+    if(root == NULL)
+    {
+        cout << "No element" << " ";
+    }
+    else
+    {
+        queue<Node*> q;
+        q.push(root);
+        Node* present = q.front();
+        Node* prev = NULL;
+        while(!q.empty())
+        {
+            if(present->left == NULL)
+            {
+                prev->right = NULL;
+            }
+            if(present->right == NULL)
+            {
+                present->left = NULL;
+            }
+            if(present->left != NULL)
+            {
+                q.push(present->left);
+            }
+            if(present->right != NULL)
+            {
+                q.push(present->right);
+            }
+            prev = present;
+            q.pop();
+            present = q.front();
+        }
+    }
+    return root;
+}
+
+Node* delete_element(Node* root,int data)
+{
+    if(root == NULL)
+    {
+        cout << "No elements" << " ";
+    }
+    else
+    {
+        queue<Node*> q;
+        q.push(root);
+        while(!q.empty())
+        {
+            Node* present = q.front();
+            q.pop();
+            if(present->key == data)
+            {
+                present->key = find_lastelement(root);
+                root = delete_last(root);
+            }
+            if(present->left != NULL)
+            {
+                q.push(present->left);
+            }
+            if(present->right != NULL)
+            {
+                q.push(present->right);
+            }
+        }
+    }
+    return root;
+}
+
+int main() {
+	Node* root=NULL;
+	root=insert(root,54);
+	root=insert(root,56);
+	root=insert(root,7);
+	root=insert(root,2);
+	root=insert(root,70);
+	root=delete_element(root,70);
+	display(root);
+}
